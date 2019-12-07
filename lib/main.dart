@@ -35,10 +35,11 @@ class NoteListState extends State<NoteList> {
     );
   }
 
-  void _addNote() {
+  void _addNote(String note) {
     setState(() {
-      int index = _notesTaken.length;
-      _notesTaken.add('This is note ' + index.toString());
+      if (note.length > 0) {
+        _notesTaken.add(note);
+      }
     });
   }
 
@@ -50,10 +51,30 @@ class NoteListState extends State<NoteList> {
       ),
       body: _buildNotesList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addNote,
+        onPressed: _pushAddTodoScreen,
         tooltip: 'Add new note',
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void _pushAddTodoScreen() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Add new note'),
+        ),
+        body: new TextField(
+          autofocus: true,
+          onSubmitted: (val) {
+            _addNote(val);
+            Navigator.pop(context);
+          },
+          decoration: InputDecoration(
+              hintText: 'What are you thinking? ',
+              contentPadding: const EdgeInsets.all(16.0)),
+        ),
+      );
+    }));
   }
 }
