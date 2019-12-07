@@ -23,15 +23,23 @@ class NoteListState extends State<NoteList> {
     return new ListView.builder(
       itemBuilder: (context, index) {
         if (index < _notesTaken.length) {
-          return _buildNoteItem(_notesTaken[index]);
+          return _buildNoteItem(_notesTaken[index], index);
         }
       },
     );
   }
 
-  Widget _buildNoteItem(String note) {
+  Widget _buildNoteItem(String note, int index) {
     return new ListTile(
       title: Text(note),
+      trailing: IconButton(
+        icon: Icon(Icons.delete),
+        color: Colors.red,
+        tooltip: 'Delete note',
+        onPressed: () {
+          _removeNote(index);
+        },
+      ),
     );
   }
 
@@ -40,6 +48,12 @@ class NoteListState extends State<NoteList> {
       if (note.length > 0) {
         _notesTaken.add(note);
       }
+    });
+  }
+
+  void _removeNote(int index) {
+    setState(() {
+      _notesTaken.removeAt(index);
     });
   }
 
